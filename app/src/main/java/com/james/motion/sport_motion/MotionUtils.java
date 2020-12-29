@@ -72,6 +72,25 @@ public class MotionUtils {
         return traceList;
     }
 
+
+    /**
+     * 将AMapLocation List 转为LatLng list
+     *
+     * @param list
+     * @return
+     */
+    public static List<LatLng> parseLatLngList2(List<LatLng> list) {
+        List<LatLng> traceList = new ArrayList<>();
+        if (list == null) {
+            return traceList;
+        }
+        for (int i = 0, size = list.size(); i < size; i++) {
+
+            traceList.add(list.get(i));
+        }
+        return traceList;
+    }
+
     public static AMapLocation parseLocation(String latLonStr) {
         if (latLonStr == null || latLonStr.equals("") || latLonStr.equals("[]")) {
             return null;
