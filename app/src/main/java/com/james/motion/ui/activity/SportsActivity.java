@@ -90,7 +90,7 @@ public class SportsActivity extends BaseActivity {
                 tvSportTime.setText(decimalFormat.format((double) sportTime / 60d));
             }
         } catch (Exception e) {
-            LogUtils.e("获取运动数据失败", e);
+            LogUtils.e("获取出勤数据失败", e);
         }
     }
 

@@ -172,7 +172,7 @@ public class LoginActivity extends BaseActivity {
         SPUtils.getInstance().put(MySp.PHONE, account);
         SPUtils.getInstance().put(MySp.PASSWORD, psd);
 
-        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+        startActivity(new Intent(LoginActivity.this, WorkActivity.class));
         ToastUtils.showShort("恭喜您,登录成功...");
 
         finish();

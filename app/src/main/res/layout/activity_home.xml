@@ -222,7 +222,7 @@
                             android:background="@color/white"
                             android:gravity="center_vertical"
                             android:paddingStart="@dimen/margin_edge"
-                            android:text="跑步成绩"
+                            android:text="出勤记录"
                             android:textColor="@color/text_color_1"
                             android:textSize="@dimen/textsize_6" />
 
@@ -240,7 +240,7 @@
                         android:background="@color/white"
                         android:gravity="center_vertical"
                         android:paddingStart="@dimen/margin_edge"
-                        android:text="运动建议"
+                        android:text="出勤建议"
                         android:textColor="@color/text_color_1"
                         android:textSize="@dimen/textsize_6" />
 
@@ -253,7 +253,7 @@
                         android:paddingLeft="@dimen/margin_edge"
                         android:paddingRight="@dimen/margin_edge"
                         android:paddingBottom="@dimen/margin_edge_20"
-                        android:text="刚开始不要追求跑步速度和距离,一坚持更久为目的吧!"
+                        android:text="今天天气气温过低，请注意保暖"
                         android:textColor="@color/text_color_2"
                         android:textSize="@dimen/textsize_4" />
                 </LinearLayout>

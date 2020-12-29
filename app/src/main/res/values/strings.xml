@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Motion</string>
+    <string name="app_name">showTrack</string>
 
     <string name="splash_appversionname">Android V%1$s</string>
 
@@ -20,4 +20,7 @@
         <item>周五</item>
         <item>周六</item>
     </string-array>
+    <string name="large_text">
+      "朋友圈"
+    </string>
 </resources>

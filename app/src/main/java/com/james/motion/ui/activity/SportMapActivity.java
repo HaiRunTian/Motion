@@ -287,7 +287,7 @@ public class SportMapActivity extends BaseActivity {
             UIHelper.setLeftDrawable(tvMode, R.mipmap.map_mode);
             rlMap.setVisibility(View.GONE);
         } else {
-            tvMode.setText("跑步模式");
+            tvMode.setText("记录模式");
             UIHelper.setLeftDrawable(tvMode, R.mipmap.run_mode);
             rlMap.setVisibility(View.VISIBLE);
         }
@@ -334,6 +334,7 @@ public class SportMapActivity extends BaseActivity {
             case R.id.tv_mode:
                 setMode();
                 break;
+            //完成
             case R.id.tv1:
                 ISSTARTUP = true;
 
@@ -354,6 +355,7 @@ public class SportMapActivity extends BaseActivity {
                     finish();
                 }
                 break;
+             //暂停
             case R.id.tv2:
                 ISSTARTUP = false;
 
@@ -372,6 +374,8 @@ public class SportMapActivity extends BaseActivity {
                 hiddenAnim2.start();
                 apperaAnim3.start();
                 break;
+
+                //继续
             case R.id.tv3:
                 ISSTARTUP = true;
 
@@ -393,7 +397,7 @@ public class SportMapActivity extends BaseActivity {
     private void saveRecord() {
 
         showLoadingView(false);
-        ToastUtils.showShort("正在保存运动数据!");
+        ToastUtils.showShort("正在保存出勤数据!");
 
         try {
             SportMotionRecord sportMotionRecord = new SportMotionRecord();
@@ -432,7 +436,7 @@ public class SportMapActivity extends BaseActivity {
 
             dataManager.insertSportRecord(sportMotionRecord);
         } catch (Exception e) {
-            LogUtils.e("保存运动数据失败", e);
+            LogUtils.e("保存出勤数据失败", e);
         }
 
         mHandler.postDelayed(() -> {
@@ -524,7 +528,7 @@ public class SportMapActivity extends BaseActivity {
         distance = getDistance(record.getPathline());
 
         double sportMile = distance / 1000d;
-        //运动距离大于0.2公里再计算配速
+        //出勤距离大于0.2公里再计算配速
         if (seconds > 0 && sportMile > 0.2) {
             double distribution = (double) seconds / 60d / sportMile;
             record.setDistribution(distribution);
@@ -818,16 +822,16 @@ public class SportMapActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (keyCode == KeyEvent.KEYCODE_BACK) { // 表示按返回键 时的操作
-                //是否正在运动记录数据
+                //是否正在出勤记录数据
                 if (ISSTARTUP) {
-                    ToastUtils.showShort("退出请点击暂停按钮，结束运动!");
+                    ToastUtils.showShort("退出请点击暂停按钮，结束出勤!");
                     return true;
 
                 }
-                //是否有运动记录
+                //是否有出勤记录
                 if (null != record && null != record.getPathline() && !record.getPathline().isEmpty()) {
                     showTipDialog("确定退出?",
-                            "退出将删除本次运动记录,如要保留运动数据,请点击完成!",
+                            "退出将删除本次出勤记录,如要保留出勤数据,请点击完成!",
                             new TipCallBack() {
                                 @Override
                                 public void confirm() {
@@ -848,15 +852,15 @@ public class SportMapActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        //是否正在运动记录数据
+        //是否正在出勤记录数据
         if (ISSTARTUP) {
-            ToastUtils.showShort("退出请点击暂停按钮，在结束运动!");
+            ToastUtils.showShort("退出请点击暂停按钮，在结束出勤!");
             return;
         }
-        //是否有运动记录
+        //是否有出勤记录
         if (null != record && null != record.getPathline() && !record.getPathline().isEmpty()) {
             showTipDialog("确定退出?",
-                    "退出将删除本次运动记录,如要保留运动数据,请点击完成!",
+                    "退出将删除本次出勤记录,如要保留出勤数据,请点击完成!",
                     new TipCallBack() {
                         @Override
                         public void confirm() {

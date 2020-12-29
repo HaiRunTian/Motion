@@ -60,6 +60,7 @@ dependencies {
     implementation rootProject.ext.support["recyclerview"]
     implementation rootProject.ext.support["cardview"]
     implementation rootProject.ext.support["layout"]
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation rootProject.ext.support["testImplementation"]
     androidTestImplementation rootProject.ext.support["androidtestimplementation_ext"]
     androidTestImplementation rootProject.ext.support["androidtestimplementation_espresso"]

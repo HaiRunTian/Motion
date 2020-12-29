@@ -128,7 +128,7 @@
             android:background="@drawable/sport_white_round"
             android:gravity="center"
             android:text="完成"
-            android:textColor="@color/text_color_green"
+            android:textColor="@color/text_color_blue"
             android:textSize="18sp" />
 
         <TextView
@@ -140,7 +140,7 @@
             android:background="@drawable/sport_white_round"
             android:gravity="center"
             android:text="暂停"
-            android:textColor="@color/text_color_green"
+            android:textColor="@color/text_color_blue"
             android:textSize="18sp" />
 
         <TextView
@@ -150,7 +150,7 @@
             android:background="@drawable/sport_white_round"
             android:gravity="center"
             android:text="继续"
-            android:textColor="@color/text_color_green"
+            android:textColor="@color/text_color_blue"
             android:textSize="18sp" />
 
     </LinearLayout>

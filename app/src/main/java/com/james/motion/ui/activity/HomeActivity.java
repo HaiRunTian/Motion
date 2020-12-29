@@ -44,13 +44,6 @@ import butterknife.OnClick;
 
 public class HomeActivity extends BaseActivity {
 
-    /**
-     * 上次点击返回键的时间
-     */
-    private long lastBackPressed;
-
-    //上次点击返回键的时间
-    public static final int QUIT_INTERVAL = 2500;
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -90,7 +83,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void initData(Bundle savedInstanceState) {
 
-        tvTitle.setText("运动日历");
+        tvTitle.setText("出勤日历");
 
         dataManager = new DataManager(new RealmHelper());
 
@@ -142,7 +135,7 @@ public class HomeActivity extends BaseActivity {
                 mCalendarView.setSchemeDate(map);
             }
         } catch (Exception e) {
-            LogUtils.e("获取运动数据失败", e);
+            LogUtils.e("获取运出勤数据失败", e);
         }
     }
 
@@ -191,7 +184,7 @@ public class HomeActivity extends BaseActivity {
                 sport_achievement.setVisibility(View.GONE);
             }
         } catch (Exception e) {
-            LogUtils.e("获取运动数据失败", e);
+            LogUtils.e("获取出勤数据失败", e);
             sport_achievement.setVisibility(View.GONE);
         }
     }
@@ -249,9 +242,10 @@ public class HomeActivity extends BaseActivity {
                 startActivityForResult(new Intent(HomeActivity.this, SportsActivity.class), SPORT);
                 break;
             case R.id.reBack:
-                showTipDialog("退出登录",
+                finish();
+               /* showTipDialog("退出登录",
                         "退出登录后将会删除历史数据,\n下次登录依然可以使用本账号!",
-                        () -> logOut());
+                        () -> logOut());*/
                 break;
             default:
                 break;
@@ -272,20 +266,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (keyCode == KeyEvent.KEYCODE_BACK) { // 表示按返回键 时的操作
-                long backPressed = System.currentTimeMillis();
-                if (backPressed - lastBackPressed > QUIT_INTERVAL) {
-                    lastBackPressed = backPressed;
-                    ToastUtils.showShort("再按一次退出");
-                    return false;
-                } else {
-                    moveTaskToBack(false);
-                    MyApplication.closeApp(this);
-                    finish();
-                }
-            }
-        }
+
         return super.onKeyDown(keyCode, event);
     }
 

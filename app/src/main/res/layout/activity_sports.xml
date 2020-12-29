@@ -117,7 +117,7 @@
                     android:drawableStart="@mipmap/icon_tip"
                     android:drawablePadding="3dp"
                     android:gravity="center_vertical"
-                    android:text="跑步方法"
+                    android:text="出勤建议"
                     android:textColor="@color/text_color_1"
                     android:textSize="@dimen/textsize_4" />
 
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_edge"
                     android:lineSpacingExtra="@dimen/lineSpacingExtra"
-                    android:text="1.请保持40分钟以上的运动时间"
+                    android:text="1.请注意周边环境安全，确认安全后继续行走"
                     android:textColor="@color/text_color_2"
                     android:textSize="@dimen/textsize_2" />
 
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/item_edge"
                     android:lineSpacingExtra="@dimen/lineSpacingExtra"
-                    android:text="2.不要跑太快，心率保持在140~160之间"
+                    android:text="2.注意个人身体状况，出现不适请注意休息"
                     android:textColor="@color/text_color_2"
                     android:textSize="@dimen/textsize_2" />
 
@@ -144,7 +144,7 @@
             <Button
                 android:id="@+id/btStart"
                 style="@style/Commit_Button_Style"
-                android:text="开始跑步" />
+                android:text="开始出勤" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

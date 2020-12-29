@@ -179,12 +179,12 @@ public class SportResultActivity extends BaseActivity {
                 upDataUI();
             } else {
                 pathRecord = null;
-                ToastUtils.showShort("获取运动数据失败!");
+                ToastUtils.showShort("获取出勤数据失败!");
             }
         } catch (Exception e) {
             pathRecord = null;
-            ToastUtils.showShort("获取运动数据失败!");
-            LogUtils.e("获取运动数据失败", e);
+            ToastUtils.showShort("获取出勤数据失败!");
+            LogUtils.e("获取出勤数据失败", e);
         }
     }
 
@@ -193,7 +193,7 @@ public class SportResultActivity extends BaseActivity {
         tvDuration.setText(MotionUtils.formatseconds(pathRecord.getDuration()));
         tvCalorie.setText(intFormat.format(pathRecord.getCalorie()));
 
-        //评分规则：依次判断 距离大于0 ★；运动时间大于40分钟 ★★；速度在3~6km/h之间 ★★★
+      /*  //评分规则：依次判断 距离大于0 ★；运动时间大于40分钟 ★★；速度在3~6km/h之间 ★★★
         if (pathRecord.getDuration() > (40 * 60) && pathRecord.getSpeed() > 3) {
             ivStar1.setImageResource(R.mipmap.small_star);
             ivStar2.setImageResource(R.mipmap.big_star);
@@ -209,7 +209,7 @@ public class SportResultActivity extends BaseActivity {
             ivStar2.setImageResource(R.mipmap.big_no_star);
             ivStar3.setImageResource(R.mipmap.small_no_star);
             tvResult.setText("跑步效果一般");
-        }
+        }*/
 
         {
             List<LatLng> recordList = pathRecord.getPathline();
@@ -247,14 +247,14 @@ public class SportResultActivity extends BaseActivity {
                 if (null != pathRecord) {
                     systemShareTxt();
                 } else {
-                    ToastUtils.showShort("获取运动数据失败!");
+                    ToastUtils.showShort("获取出勤数据失败!");
                 }
                 break;
             case R.id.ll_details:
                 if (null != pathRecord) {
                     SportRecordDetailsActivity.StartActivity(this, pathRecord);
                 } else {
-                    ToastUtils.showShort("获取运动数据失败!");
+                    ToastUtils.showShort("获取出勤数据失败!");
                 }
                 break;
             default:
@@ -324,9 +324,9 @@ public class SportResultActivity extends BaseActivity {
     private void systemShareTxt() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, UIHelper.getString(R.string.app_name) + "运动");
-        intent.putExtra(Intent.EXTRA_TEXT, "我在" + UIHelper.getString(R.string.app_name) + "运动跑了" + decimalFormat.format(pathRecord.getDistance())
-                + "公里,运动了" + decimalFormat.format(pathRecord.getDuration() / 60) + "分钟!快来加入吧!");
+        intent.putExtra(Intent.EXTRA_SUBJECT, UIHelper.getString(R.string.app_name) + "出勤");
+        intent.putExtra(Intent.EXTRA_TEXT, "我在" + UIHelper.getString(R.string.app_name) + "行走了" + decimalFormat.format(pathRecord.getDistance())
+                + "公里,行走了" + decimalFormat.format(pathRecord.getDuration() / 60) + "分钟!快来加入吧!");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(Intent.createChooser(intent, "分享到"));
     }

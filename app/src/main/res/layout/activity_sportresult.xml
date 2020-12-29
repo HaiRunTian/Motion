@@ -56,7 +56,7 @@
                 android:drawableEnd="@mipmap/icon_help"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
-                android:text="跑步效果"
+                android:text="出勤报告"
                 android:textColor="@color/text_color_white"
                 android:textSize="@dimen/textsize_6" />
 

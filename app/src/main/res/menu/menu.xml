@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_msg"
+        android:icon="@mipmap/icon_psd_s"
+        android:title="消息" />
+    <item
+        android:id="@+id/item_work"
+        android:icon="@mipmap/icon_account"
+        android:title="工作台" />
+    <item
+        android:id="@+id/item_person"
+        android:icon="@mipmap/icon_qq"
+        android:title="朋友圈" />
+
+
+</menu>

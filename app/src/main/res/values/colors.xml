@@ -5,9 +5,9 @@
     <color name="colorAccent">#40c632</color>
 
     <!--主色调-->
-    <color name="basecolor">#49B557</color>
-    <color name="basecolorShallow">#57df48</color>
-    <color name="basecolorDeep">#40c632</color>
+    <color name="basecolor">#1E90FF</color>
+    <color name="basecolorShallow">#1E90FF</color>
+    <color name="basecolorDeep">#1E90FF</color>
 
     <!--字体、背景-->
     <color name="layout_bg">#f8f9fa</color>

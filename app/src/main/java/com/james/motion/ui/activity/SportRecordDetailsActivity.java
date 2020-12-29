@@ -70,7 +70,7 @@ public class SportRecordDetailsActivity extends BaseActivity {
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        tvTitle.setText("运动记录");
+        tvTitle.setText("出勤记录");
 
         if (getIntent().hasExtra(SPORT_DATA)) {
             pathRecord = getIntent().getParcelableExtra(SPORT_DATA);
