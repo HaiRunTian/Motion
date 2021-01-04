@@ -61,6 +61,7 @@ public class FastLoginFragment extends BaseFragment {
         }
 
         chronometer.setText("获取验证码");
+        yanZhengMa();
     }
 
     @Override

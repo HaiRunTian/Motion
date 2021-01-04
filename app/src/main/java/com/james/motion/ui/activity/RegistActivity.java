@@ -57,6 +57,7 @@ public class RegistActivity extends BaseActivity {
         LogUtils.d("已注册的账号", new Gson().toJson(dataManager.queryAccountList()) + "");
 
         chronometer.setText("获取验证码");
+        yanZhengMa();
 
     }
 

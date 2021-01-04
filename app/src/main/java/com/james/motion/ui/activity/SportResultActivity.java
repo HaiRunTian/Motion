@@ -148,7 +148,7 @@ public class SportResultActivity extends BaseActivity {
     private void initPolyline() {
         polylineOptions = new PolylineOptions();
         polylineOptions.color(getResources().getColor(R.color.colorAccent));
-        polylineOptions.width(20f);
+        polylineOptions.width(10f);
         polylineOptions.useGradient(true);
 
         mpathSmoothTool = new PathSmoothTool();

@@ -2,7 +2,7 @@ package com.james.motion.commmon.utils;
 
 public class Conn {
 
-    public static int Delayed = 1500;//延迟
+    public static int Delayed = 1000;//延迟
 
     public static String sdCardPathDown = "";//数据保存路径
 

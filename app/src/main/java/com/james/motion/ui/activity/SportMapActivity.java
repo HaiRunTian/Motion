@@ -3,10 +3,16 @@ package com.james.motion.ui.activity;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
+
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
+import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.SystemClock;
 import android.view.KeyEvent;
@@ -44,6 +50,7 @@ import com.james.motion.commmon.utils.MySp;
 import com.james.motion.commmon.utils.UIHelper;
 import com.james.motion.db.DataManager;
 import com.james.motion.db.RealmHelper;
+import com.james.motion.sport_motion.LocationService;
 import com.james.motion.sport_motion.MotionUtils;
 import com.james.motion.sport_motion.PathSmoothTool;
 import com.james.motion.ui.BaseActivity;
@@ -93,28 +100,28 @@ public class SportMapActivity extends BaseActivity {
     //运动计算相关
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-//    private boolean isBind = false;
-//    private LocationService mService = null;
-//    private ServiceConnection mConnection = new ServiceConnection() {
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//            mService = null;
-//        }
-//
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//            // 获取服务上的IBinder对象，调用IBinder对象中定义的自定义方法，获取Service对象
-//            LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
-//            mService = binder.getService();
-//            mService.setInterfaceLocationed(aMapLocation -> {
-//                Message msg = Message.obtain();
-//                msg.what = LOCATION;
-//                msg.obj = aMapLocation;
-//                mHandler.sendMessage(msg);
-//            });
-//        }
-//    };
+    private boolean isBind = false;
+    private LocationService mService = null;
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            // 获取服务上的IBinder对象，调用IBinder对象中定义的自定义方法，获取Service对象
+            LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
+            mService = binder.getService();
+            mService.setInterfaceLocationed(aMapLocation -> {
+                Message msg = Message.obtain();
+                msg.what = LOCATION;
+                msg.obj = aMapLocation;
+                mHandler.sendMessage(msg);
+            });
+        }
+    };
 
     //地图中定位的类
     private OnLocationChangedListener mListener = null;
@@ -149,22 +156,22 @@ public class SportMapActivity extends BaseActivity {
 
     private AMap aMap;
 
-    private boolean mode = true;
+    private boolean mode = false;
 
     private final int LOCATION = 0;
     private Handler mHandler = new Handler(Looper.getMainLooper())
-//    {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case LOCATION://用handler刷新数据
-//                    updateLocation((AMapLocation) msg.obj);
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//    }
+    {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case LOCATION://用handler刷新数据
+                    updateLocation((AMapLocation) msg.obj);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
             ;
 
     private class MyRunnable implements Runnable {
@@ -242,7 +249,7 @@ public class SportMapActivity extends BaseActivity {
     private void initPolyline() {
         polylineOptions = new PolylineOptions();
         polylineOptions.color(getResources().getColor(R.color.colorAccent));
-        polylineOptions.width(20f);
+        polylineOptions.width(10f);
         polylineOptions.useGradient(true);
 
         mpathSmoothTool = new PathSmoothTool();
@@ -251,34 +258,34 @@ public class SportMapActivity extends BaseActivity {
 
     private void startUpLocation() {
         //绑定服务
-//        isBind = bindService(new Intent(this, LocationService.class), mConnection, Service.BIND_AUTO_CREATE);
+        isBind = bindService(new Intent(this, LocationService.class), mConnection,BIND_AUTO_CREATE);
 
         //屏幕保持常亮
         if (null != mapView)
             sportContent.setKeepScreenOn(true);
-
-        startLocation();
+            //本地定位
+//        startLocation();
     }
 
     private void unBindService() {
         //解除绑定服务
-//        if (isBind && null != mService) {
-//            unbindService(mConnection);
-//            isBind = false;
-//        }
-//        mService = null;
+        if (isBind && null != mService) {
+            unbindService(mConnection);
+            isBind = false;
+        }
+        mService = null;
 
         //屏幕取消常亮
         if (null != mapView)
             sportContent.setKeepScreenOn(false);
 
         //停止定位
-        if (null != mLocationClient) {
-            mLocationClient.stopLocation();
-            mLocationClient.unRegisterLocationListener(aMapLocationListener);
-            mLocationClient.onDestroy();
-            mLocationClient = null;
-        }
+//        if (null != mLocationClient) {
+//            mLocationClient.stopLocation();
+//            mLocationClient.unRegisterLocationListener(aMapLocationListener);
+//            mLocationClient.onDestroy();
+//            mLocationClient = null;
+//        }
     }
 
     private void setMode() {
@@ -297,31 +304,31 @@ public class SportMapActivity extends BaseActivity {
     /**
      * 开始定位。
      */
-    private void startLocation() {
-        if (mLocationClient == null) {
-            mLocationClient = new AMapLocationClient(this);
-            //设置定位属性
-            mLocationOption = new AMapLocationClientOption();
-            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
-            mLocationOption.setGpsFirst(true);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
-            mLocationOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
-            mLocationOption.setInterval(interval);//可选，设置定位间隔。默认为2秒
-            mLocationOption.setNeedAddress(false);//可选，设置是否返回逆地理地址信息。默认是true
-            mLocationOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
-            mLocationOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
-            AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
-            mLocationOption.setSensorEnable(true);//可选，设置是否使用传感器。默认是false
-            mLocationOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
-            mLocationOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
-            mLocationOption.setGeoLanguage(AMapLocationClientOption.GeoLanguage.ZH);//可选，设置逆地理信息的语言，默认值为默认语言（根据所在地区选择语言）
-            mLocationClient.setLocationOption(mLocationOption);
-
-            // 设置定位监听
-            mLocationClient.setLocationListener(aMapLocationListener);
-            //开始定位
-            mLocationClient.startLocation();
-        }
-    }
+//    private void startLocation() {
+//        if (mLocationClient == null) {
+//            mLocationClient = new AMapLocationClient(this);
+//            //设置定位属性
+//            mLocationOption = new AMapLocationClientOption();
+//            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+//            mLocationOption.setGpsFirst(true);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
+//            mLocationOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+//            mLocationOption.setInterval(interval);//可选，设置定位间隔。默认为2秒
+//            mLocationOption.setNeedAddress(false);//可选，设置是否返回逆地理地址信息。默认是true
+//            mLocationOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
+//            mLocationOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
+//            AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
+//            mLocationOption.setSensorEnable(true);//可选，设置是否使用传感器。默认是false
+//            mLocationOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
+//            mLocationOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
+//            mLocationOption.setGeoLanguage(AMapLocationClientOption.GeoLanguage.ZH);//可选，设置逆地理信息的语言，默认值为默认语言（根据所在地区选择语言）
+//            mLocationClient.setLocationOption(mLocationOption);
+//
+//            // 设置定位监听
+//            mLocationClient.setLocationListener(aMapLocationListener);
+//            //开始定位
+//            mLocationClient.startLocation();
+//        }
+//    }
 
     @Override
     public void initListener() {
@@ -478,7 +485,7 @@ public class SportMapActivity extends BaseActivity {
         @Override
         public void activate(OnLocationChangedListener onLocationChangedListener) {
             mListener = onLocationChangedListener;
-            startLocation();
+//            startLocation();
         }
 
         @Override
@@ -497,22 +504,22 @@ public class SportMapActivity extends BaseActivity {
      *
      * @param aMapLocation 位置信息类
      */
-    private AMapLocationListener aMapLocationListener = aMapLocation -> {
-        if (null == aMapLocation)
-            return;
-        if (aMapLocation.getErrorCode() == 0) {
-            //先暂时获得经纬度信息，并将其记录在List中
-            LogUtils.d("纬度信息为" + aMapLocation.getLatitude() + "\n经度信息为" + aMapLocation.getLongitude());
-//            LatLng locationValue = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());
-
-            //定位成功
-            updateLocation(aMapLocation);
-
-        } else {
-            String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
-            LogUtils.e("AmapErr", errText);
-        }
-    };
+//    private AMapLocationListener aMapLocationListener = aMapLocation -> {
+//        if (null == aMapLocation)
+//            return;
+//        if (aMapLocation.getErrorCode() == 0) {
+//            //先暂时获得经纬度信息，并将其记录在List中
+//            LogUtils.d("纬度信息为" + aMapLocation.getLatitude() + "\n经度信息为" + aMapLocation.getLongitude());
+////            LatLng locationValue = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());
+//
+//            //定位成功
+//            updateLocation(aMapLocation);
+//
+//        } else {
+//            String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
+//            LogUtils.e("AmapErr", errText);
+//        }
+//    };
 
     private void updateLocation(AMapLocation aMapLocation) {
         //原始轨迹

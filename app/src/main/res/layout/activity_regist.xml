@@ -62,6 +62,7 @@
                     android:src="@mipmap/icon_phone_white" />
 
                 <EditText
+                    android:text="13558248888"
                     android:id="@+id/et_account"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -156,6 +157,7 @@
                     android:src="@mipmap/icon_psd_white" />
 
                 <EditText
+                    android:text="123456"
                     android:id="@+id/et_psd"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -196,6 +198,7 @@
                     android:src="@mipmap/icon_psd_ck_white" />
 
                 <EditText
+                    android:text="123456"
                     android:id="@+id/et_checkPsd"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

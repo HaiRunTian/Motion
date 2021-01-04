@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -63,6 +64,9 @@ public class HomeActivity extends BaseActivity {
     CalendarLayout mCalendarLayout;
     @BindView(R.id.sport_achievement)
     LinearLayout sport_achievement;
+    @BindView(R.id.imgView)
+    ImageView imgView;
+
 
     private Dialog tipDialog = null;
 
@@ -222,7 +226,7 @@ public class HomeActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.fl_current, R.id.tv_month_day, R.id.reRight, R.id.reBack})
+    @OnClick({R.id.fl_current, R.id.tv_month_day, R.id.reRight, R.id.reBack,R.id.imgView})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fl_current:
@@ -239,6 +243,7 @@ public class HomeActivity extends BaseActivity {
                 mTextMonthDay.setText(String.valueOf(mYear));
                 break;
             case R.id.reRight:
+            case R.id.imgView:
                 startActivityForResult(new Intent(HomeActivity.this, SportsActivity.class), SPORT);
                 break;
             case R.id.reBack:

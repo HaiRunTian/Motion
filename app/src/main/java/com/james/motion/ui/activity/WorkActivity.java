@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -49,6 +50,8 @@ public class WorkActivity extends BaseActivity {
     RelativeLayout reBack;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.imgView)
+    ImageView imgView;
     @BindView(R.id.reRight)
     RelativeLayout reRight;
     @BindView(R.id.header)
@@ -115,10 +118,11 @@ public class WorkActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.header, R.id.reRight})
+    @OnClick({R.id.header, R.id.reRight,R.id.imgView})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.reRight:
+            case R.id.imgView:
                 startActivity(new Intent(WorkActivity.this, HomeActivity.class));
                 break;
             case R.id.reBack:
