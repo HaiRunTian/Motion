@@ -39,6 +39,9 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!--用于申请调用A-GPS模块-->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <!--如果设置了target >= 28 如果需要启动后台定位则必须声明这个权限-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!--用于申请获取蓝牙信息进行室内定位-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -135,7 +138,8 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!--高德定位服务-->
-        <service android:name="com.amap.api.location.APSService" />
+        <service android:name="com.amap.api.location.APSService"
+            android:foregroundServiceType="location"/>
         <!--开发者申请的key-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -145,6 +149,7 @@
         <service
             android:name=".sport_motion.LocationService"
             android:enabled="true"
+            android:foregroundServiceType="location"
             android:exported="false">
             <!--exported属性，指示该服务是否能够被其他应用程序组件调用或跟它交互-->
             <intent-filter android:priority="1000">

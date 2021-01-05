@@ -33,6 +33,7 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.LocationSource.OnLocationChangedListener;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.MyLocationStyle;
@@ -114,11 +115,14 @@ public class SportMapActivity extends BaseActivity {
             // 获取服务上的IBinder对象，调用IBinder对象中定义的自定义方法，获取Service对象
             LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
             mService = binder.getService();
+
             mService.setInterfaceLocationed(aMapLocation -> {
                 Message msg = Message.obtain();
                 msg.what = LOCATION;
                 msg.obj = aMapLocation;
                 mHandler.sendMessage(msg);
+
+
             });
         }
     };
@@ -130,6 +134,7 @@ public class SportMapActivity extends BaseActivity {
     private final Long interval = 1000L;//定位时间间隔
 
     private PolylineOptions polylineOptions;
+    //轨迹路线
     private Polyline mOriginPolyline;
     private PathRecord record;
     private DataManager dataManager = null;
@@ -159,12 +164,14 @@ public class SportMapActivity extends BaseActivity {
     private boolean mode = false;
 
     private final int LOCATION = 0;
+
     private Handler mHandler = new Handler(Looper.getMainLooper())
     {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case LOCATION://用handler刷新数据
+                case LOCATION:
+                    //用handler刷新数据
                     updateLocation((AMapLocation) msg.obj);
                     break;
                 default:
@@ -246,14 +253,18 @@ public class SportMapActivity extends BaseActivity {
         setMode();
     }
 
+    /**
+     * 设置轨迹路线样式
+     */
     private void initPolyline() {
+
         polylineOptions = new PolylineOptions();
         polylineOptions.color(getResources().getColor(R.color.colorAccent));
         polylineOptions.width(10f);
         polylineOptions.useGradient(true);
 
         mpathSmoothTool = new PathSmoothTool();
-        mpathSmoothTool.setIntensity(4);
+        mpathSmoothTool.setIntensity(1);
     }
 
     private void startUpLocation() {
@@ -471,14 +482,15 @@ public class SportMapActivity extends BaseActivity {
         // myLocationStyle.anchor(int,int)//设置小蓝点的锚点
         // 设置定位的类型为定位模式 ，定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
-//        myLocationStyle.interval(interval);//设置发起定位请求的时间间隔
+        myLocationStyle.interval(interval);//设置发起定位请求的时间间隔
 //        myLocationStyle.showMyLocation(true);//设置是否显示定位小蓝点，true 显示，false不显示
-        myLocationStyle.strokeWidth(1.0f);// 设置圆形的边框粗细
+        myLocationStyle.strokeWidth(2.0f);// 设置圆形的边框粗细
         aMap.setMyLocationStyle(myLocationStyle);
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.getUiSettings().setZoomControlsEnabled(false);// 设置默认缩放按钮是否显示
         aMap.getUiSettings().setCompassEnabled(false);// 设置默认指南针是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        aMap.getUiSettings().setScaleControlsEnabled(true); //控制比例尺控件是否显示
     }
 
     private LocationSource locationSource = new LocationSource() {
@@ -521,19 +533,24 @@ public class SportMapActivity extends BaseActivity {
 //        }
 //    };
 
+    /**
+     * 更新数据
+     * @param aMapLocation
+     */
     private void updateLocation(AMapLocation aMapLocation) {
         //原始轨迹
 //        if (mOriginList != null && mOriginList.size() > 0) {
 //            mOriginPolyline = aMap.addPolyline(new PolylineOptions().addAll(mOriginList).color(Color.GREEN));
-//            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(getBounds(mOriginList), 200));
+//            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(getBounds(mOriginList), 20));
 //        }
 
 
+        //添加点到集合 list
         record.addpoint(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()));
 
-        //计算配速
+        //计算距离
         distance = getDistance(record.getPathline());
-
+        //计算配速
         double sportMile = distance / 1000d;
         //出勤距离大于0.2公里再计算配速
         if (seconds > 0 && sportMile > 0.2) {
@@ -548,11 +565,11 @@ public class SportMapActivity extends BaseActivity {
         }
 
         mSportLatLngs.clear();
-        //轨迹平滑优化
+        //轨迹平滑优化  去噪音  滤波  抽稀
         mSportLatLngs = new ArrayList<>(mpathSmoothTool.pathOptimize(record.getPathline()));
         //抽稀
-        mSportLatLngs = new ArrayList<>(mpathSmoothTool.reducerVerticalThreshold(MotionUtils.parseLatLngList2(record.getPathline())));
 //        mSportLatLngs = new ArrayList<>(mpathSmoothTool.reducerVerticalThreshold(MotionUtils.parseLatLngList(record.getPathline())));
+//                mSportLatLngs = new ArrayList<>(mpathSmoothTool.reducerVerticalThreshold(MotionUtils.parseLatLngList2(record.getPathline())));
         //不做处理
 //        mSportLatLngs = new ArrayList<>(MotionUtils.parseLatLngList(record.getPathline()));
 
@@ -561,9 +578,13 @@ public class SportMapActivity extends BaseActivity {
             if (mListener != null)
                 mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
 //            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(getBounds(mSportLatLngs), 18));
-            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()), 18));
+            //带动画的高德地图缩放的api：
+            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()), 19));
+            LogUtils.d("TAG",aMapLocation.getLongitude()  + ":" + aMapLocation.getLatitude() +"    处理前 size = "+ record.getPathline().size() + "处理后 size" + mSportLatLngs.size());
         }
         mOriginPolyline = aMap.addPolyline(polylineOptions);
+
+
     }
 
     @Override

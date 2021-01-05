@@ -70,7 +70,7 @@ public class LocationService extends Service {
         mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
         mOption.setGpsFirst(true);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
         mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
-        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setInterval(1000);//可选，设置定位间隔。默认为2秒
         mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
         mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
         mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
@@ -80,6 +80,7 @@ public class LocationService extends Service {
         mOption.setLocationCacheEnable(false); //可选，设置是否使用缓存定位，默认为true
         mOption.setGeoLanguage(AMapLocationClientOption.GeoLanguage.DEFAULT);//可选，设置逆地理信息的语言，默认值为默认语言（根据所在地区选择语言）
         mLocationClient.setLocationOption(mOption);
+
     }
 
     //定位回调
@@ -87,7 +88,7 @@ public class LocationService extends Service {
 
         if (null == aMapLocation)
             return;
-
+            //0 定位成功。
         if (aMapLocation.getErrorCode() == 0) {
             //先暂时获得经纬度信息，并将其记录在List中
             LogUtils.d("111111纬度信息为" + aMapLocation.getLatitude() + "\n经度信息为" + aMapLocation.getLongitude());
@@ -95,15 +96,17 @@ public class LocationService extends Service {
 //                mSportLatLngs.add(locationValue);
 
             //将运动信息上传至服务器
-            recordLocation(locationValue, aMapLocation.getLocationDetail());
+//            recordLocation(locationValue, aMapLocation.getLocationDetail());
 
             //定位成功，发送通知
-            if (null != interfaceLocationed)
+            if (null != interfaceLocationed) {
+                //回调到地图界面
                 interfaceLocationed.locationed(aMapLocation);
+            }
 
         } else {
             String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
-            LogUtils.e("AmapErr", errText);
+            LogUtils.e( errText);
         }
     };
 
@@ -129,6 +132,7 @@ public class LocationService extends Service {
         return super.onUnbind(intent);
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -138,6 +142,8 @@ public class LocationService extends Service {
             mLocationClient.onDestroy();
             mLocationClient = null;
         }
+
+        LogUtils.e("onDestroy");
     }
 
     public void setInterfaceLocationed(InterfaceLocationed interfaceLocationed) {

@@ -19,7 +19,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void recordSport(LatLng latLng, String location) {
-        LogUtils.d("保存定位数据 = " + latLng.latitude + ":" + latLng.longitude + "   " + location);
+//        LogUtils.d("保存定位数据 = " + latLng.latitude + ":" + latLng.longitude + "   " + location);
     }
 
 }

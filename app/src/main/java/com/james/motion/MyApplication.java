@@ -19,7 +19,6 @@ import java.util.List;
 
 import io.realm.Realm;
 
-////////////////////////////////////////////////////////////////////
 public class MyApplication extends MultiDexApplication {
 
     public static boolean DEBUG_MODE = false;//是否是DEBUG模式
@@ -38,7 +37,9 @@ public class MyApplication extends MultiDexApplication {
         initApplication();
     }
 
-    private void initApplication() {
+    private void
+
+    initApplication() {
 //        getHandler().post(() -> {
 
         //初始化数据库

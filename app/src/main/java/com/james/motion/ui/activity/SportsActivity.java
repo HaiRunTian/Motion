@@ -6,8 +6,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.james.motion.R;
 import com.james.motion.commmon.bean.SportMotionRecord;
+import com.james.motion.commmon.utils.GpsUtils;
 import com.james.motion.commmon.utils.LogUtils;
 import com.james.motion.commmon.utils.MySp;
 import com.james.motion.db.DataManager;
@@ -65,6 +67,13 @@ public class SportsActivity extends BaseActivity {
 
     @OnClick(R.id.btStart)
     public void onViewClicked() {
+
+        if (!GpsUtils.isOPen(SportsActivity.this)) {
+            ToastUtils.showShort( "请先打开GPS定位功能");
+            GpsUtils.openGPS(SportsActivity.this);
+            return;
+        }
+
         PermissionHelper.requestPermissions(this, Permissions.PERMISSIONS_LOCATION,
                 getResources().getString(R.string.app_name) + "需要获取位置", new PermissionListener() {
                     @Override
@@ -72,6 +81,7 @@ public class SportsActivity extends BaseActivity {
                         startActivityForResult(new Intent(SportsActivity.this, SportMapActivity.class), SPORT);
                     }
                 });
+
     }
 
     private void upDateUI() {

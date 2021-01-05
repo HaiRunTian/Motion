@@ -58,7 +58,10 @@ public interface Permissions {
             Manifest.permission.WRITE_CONTACTS};
     String[] PERMISSIONS_LOCATION = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+            Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
+            Manifest.permission.FOREGROUND_SERVICE
     };
 
 }

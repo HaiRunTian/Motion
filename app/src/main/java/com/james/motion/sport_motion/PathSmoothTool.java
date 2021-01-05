@@ -18,9 +18,9 @@ import java.util.List;
 
 public class PathSmoothTool {
 
-    private int mIntensity = 3;
-    private float mThreshhold = 1.0f;
-    private float mNoiseThreshhold = 10;
+    private int mIntensity = 4;
+    private float mThreshhold = 2.0f;
+    private float mNoiseThreshhold = 20;
 
     public PathSmoothTool() {
 
